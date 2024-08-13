@@ -1,8 +1,6 @@
 % 1. Load a Mesh
 [V, F] = readOFF('D:\SGI Summer Internship\MFC\codes\gptoolbox-master\gptoolbox-master\mesh.off');
 
-% Load the mesh from the OBJ file  
-%[V, F] = load_mesh('D:\Conferences and Workshops\SGI Summer Internship\MFC - Solomon\codes\gptoolbox-master\gptoolbox-master\mesh.obj');  
 
 % 2. Display the Mesh
 figure;
