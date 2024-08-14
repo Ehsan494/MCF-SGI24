@@ -1,6 +1,7 @@
 % 1. Load a Mesh
-[V, F] = readOFF('D:\SGI Summer Internship\MFC\codes\gptoolbox-master\gptoolbox-master\mesh.off');
 
+% Load the mesh from the off file   
+[V, F] = load_mesh('sphere.off');
 
 % 2. Display the Mesh
 figure;
@@ -14,7 +15,7 @@ ylabel('Y');
 zlabel('Z');
 
 % Define the number of iterations and timestep for smoothing
-num_iterations = 100;
+num_iterations = 200;
 time_step = 0.01;
 
 % 3. Mean Curvature Flow (MCF) - Explicit Method
