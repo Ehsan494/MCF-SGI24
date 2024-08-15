@@ -1,4 +1,19 @@
-% Angle Deficit Method for computing Gaussian curvature on a mesh
+%Angle Deficit Method: This algorithm calculates the Gaussian curvature 
+% at a vertex by measuring how much the sum of the angles around that vertex deviates from 
+% 2pi (the sum of angles in a flat plane). The Gaussian curvature is then obtained by normalizing 
+% this angle deficit by the area associated with the vertex (usually the barycentric area).
+
+% Output:
+% 
+% 1. Gaussian Curvature Vector:
+%    - gaussian_curvature: A vector of size [N, 1], where N is the number of vertices in the mesh.
+%      This vector contains the Gaussian curvature value at each vertex of the mesh.
+% 
+% 2. Visualization Plot:
+%    - A 3D surface plot showing the Gaussian curvature of the mesh.
+%      - The mesh surface is colored according to the Gaussian curvature values.
+%      - A colorbar is included to indicate the range of curvature values.
+%      - The plot includes axis labels for X, Y, and Z coordinates and is titled "Gaussian Curvature".
 
 % Load the mesh
 [V, F] = load_mesh('sphere.off');  % Replace 'sphere.off' with your actual file name
