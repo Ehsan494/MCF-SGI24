@@ -1,3 +1,5 @@
+% Angle Deficit Method for computing Gaussian curvature on a mesh
+
 % Load the mesh
 [V, F] = load_mesh('sphere.off');  % Replace 'sphere.off' with your actual file name
 
