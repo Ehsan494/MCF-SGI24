@@ -6,17 +6,15 @@
 % Step 1: Load a Mesh
 [V, F] = load_mesh('sphere.off');
 
-% Step 2: Compute Laplace-Beltrami Operator
-L = cotmatrix(V, F);  
+% Step 2: Compute Laplace-Beltrami Operator (L) and Mass Matrix (M)
+L = cotmatrix(V, F);  % cotangent Laplace-Beltrami operator
+M = massmatrix(V, F, 'barycentric');
 
-% Step 3: Compute the Mean Curvature Vector (H)
-H = -L * V; 
-
-% Step 4: Compute the Mean Curvature Magnitude
+% Step 3: Compute the Magnitude of Mean Curvature (mean curvature at each vertex)
+H = -inv(M) * (L * V);
 mean_curvature = sqrt(sum(H.^2, 2));
 
 % Step 5: Compute the Laplacian of Mean Curvature
-laplacian_H = L * mean_curvature;
 laplacian_H = L * mean_curvature;
 
 % Step 6: Visualization or Further Processing
