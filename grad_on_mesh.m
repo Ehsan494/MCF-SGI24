@@ -6,7 +6,7 @@ L = cotmatrix(V, F);  % cotangent Laplace-Beltrami operator
 M = massmatrix(V, F, 'barycentric');
 
 % Step 3: Compute the Magnitude of Mean Curvature (mean curvature at each vertex)
-H = -inv(M) * (L * V);
+H = inv(M) * (L * V);
 mean_curvature = sqrt(sum(H.^2, 2));
 
 % Step 5: Compute the Gradient of Mean Curvature
