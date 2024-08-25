@@ -1,3 +1,10 @@
+
+% This script computes the mean, Gaussian curvature, per-vertex normals on a mesh, and outputs
+% an animation that rotates the 3D view of the mesh, saved as a GIF file. 
+% The goal is to provide a comprehensive visualization of the curvature properties and 
+% surface normals
+
+
 % Load a mesh
 [V, F] = load_mesh('sphere.off');  
 
