@@ -1,6 +1,10 @@
-%The purpose of the code is to demonstrate two different approaches for performing Mean Curvature Flow (MCF) on a 3D mesh. 
-% Mean Curvature Flow is a geometric process where the vertices of the mesh are iteratively adjusted to smooth the surface. 
-% This is done by moving each vertex in the direction of the mean curvature normal vector, effectively reducing surface irregularities over time.
+% The purpose of the code is to demonstrate two different
+% approaches (Euler Explicit + Desbrun's et al Semi-Implicit)
+% for performing Mean Curvature Flow (MCF) on a 3D mesh. 
+% Mean Curvature Flow is a geometric process where the vertices of the 
+% mesh are iteratively adjusted to smooth the surface. 
+% This is done by moving each vertex in the direction of the mean curvature normal vector,
+% effectively reducing surface irregularities over time.
 
 % Input:
 % - 'bear.off': A 3D mesh file representing the bear model.
@@ -66,10 +70,12 @@ for iter = 1:num_iterations
     % Compute the Laplace-Beltrami operator
      L = cotmatrix(V_explicit, F);
      M = massmatrix(V, F, 'voronoi');
-     HN = inv(M)* (L * V_explicit);
-    
-    % Solve (I - time_step * L) * V_new = V_old
-    V_implicit = (speye(size(V_implicit, 1)) - time_step * L) \ V_implicit;
+
+    % Form the system matrix A = (I - Delta t * M^(-1) * L)
+        % Using speye to get the identity matrix
+        A = speye(size(V, 1)) - time_step * (M \ L);
+        % Solve the system A * V_new = V_old
+        V_semi_implicit = A \ V_semi_implicit;
 end
 
 % Display the smoothed mesh - Semi-Implicit Method
