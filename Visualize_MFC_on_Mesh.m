@@ -15,17 +15,21 @@
 % Output:
 % - A figure displaying the original noisy mesh, the result of explicit MCF, and the result of semi-implicit MCF.
 
+% Load your mesh
 [V, F] = load_mesh('bear.off');
 
 % Set the noise level (e.g., 0.01)
 noise_level = 0.01;
+
+% Regularization parameter
+epsilon = eps;
 
 % Add noise to the mesh
 V_noisy = add_noise_to_mesh(V, noise_level);
 
 % Display the noisy mesh
 figure;
-trisurf(F, V_noisy(:,1), V_noisy(:,2), V_noisy(:,3), 'FaceColor', 'cyan', 'EdgeColor', 'none');
+trisurf(F, V_noisy(:,1), V_noisy(:,2), V_noisy(:,3), 'FaceColor', [1, 0, 1], 'EdgeColor', 'none');
 axis equal;
 lighting gouraud;
 camlight;
@@ -35,26 +39,26 @@ ylabel('Y');
 zlabel('Z');
 
 % Define the number of iterations and timestep for smoothing
-num_iterations = 400;
-time_step = eps;
+num_iterations = 100;
+time_step = 0.0001;
+
 
 % 3. Mean Curvature Flow (MCF) - Explicit Method
-V_explicit = V; % Copy the vertices for the explicit method
+V_explicit = V_noisy; % Copy the vertices for the explicit method
 
 for iter = 1:num_iterations
     % Compute the Laplace-Beltrami operator and mean curvature normal
     L = cotmatrix(V_explicit, F);
-    M = massmatrix(V, F, 'voronoi'); 
-    %M = massmatrix(V, F, 'barycentric');
-    HN = inv(M)* (L * V_explicit);
+    M = massmatrix(V_explicit, F, 'barycentric'); 
+    HN = inv(M)*(L * V_explicit);
     
-    % Update vertex positions
     V_explicit = V_explicit + time_step * HN;
+    
 end
 
 % Display the smoothed mesh - Explicit Method
 figure;
-trisurf(F, V_explicit(:,1), V_explicit(:,2), V_explicit(:,3), 'FaceColor', 'cyan', 'EdgeColor', 'none');
+trisurf(F, V_explicit(:,1), V_explicit(:,2), V_explicit(:,3), 'FaceColor', [1, 0, 1], 'EdgeColor', 'none');
 axis equal;
 lighting gouraud;
 camlight;
@@ -63,24 +67,37 @@ xlabel('X');
 ylabel('Y');
 zlabel('Z');
 
-% 3. Mean Curvature Flow (MCF) - Semi-Implicit Method
-V_implicit = V; % Copy the vertices for the implicit method
+% Semi-Implicit Method by Desbrun et al.
+V_semi = V_noisy; % Copy the vertices for the semi-implicit method
 
 for iter = 1:num_iterations
     % Compute the Laplace-Beltrami operator
-     L = cotmatrix(V_explicit, F);
-     M = massmatrix(V, F, 'voronoi');
-
-    % Form the system matrix A = (I - Delta t * M^(-1) * L)
-        % Using speye to get the identity matrix
-        A = speye(size(V, 1)) - time_step * (M \ L);
-        % Solve the system A * V_new = V_old
-        V_semi_implicit = A \ V_semi_implicit;
+    L = cotmatrix(V_semi, F);
+    M = massmatrix(V_semi, F, 'barycentric');
+    c=time_step * ( inv(M)*L); d=speye(size(V_semi, 1));
+    A = speye(size(c)) - c;
+    % Regularize the matrix to ensure positive definiteness
+    epsilon = eps; % Small positive value
+    A = A + epsilon * speye(size(A)); % Regularize the matrix
+        
+    % Solve the system A * V_new = V_old
+    
+    %V_semi=A\ V_semi;
+    U=zeros(size(V_semi));
+    for i=1:3
+        B=V_semi(:,i);
+        % Solve the system A * X = B using Biconjugate Gradient (BiCG)
+        [X, ~] = bicg(A, B, 1e-6, 1000);
+        U(:,i)=X;
+    end
+    V_semi=U; 
+      
+        
 end
 
-% Display the smoothed mesh - Semi-Implicit Method
+% Display the smoothed mesh Semi-Implicit Method
 figure;
-trisurf(F, V_implicit(:,1), V_implicit(:,2), V_implicit(:,3), 'FaceColor', 'cyan', 'EdgeColor', 'none');
+trisurf(F, V_semi(:,1), V_semi(:,2), V_semi(:,3), 'FaceColor', [1, 0, 1], 'EdgeColor', 'none');
 axis equal;
 lighting gouraud;
 camlight;
