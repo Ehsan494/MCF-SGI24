@@ -1,4 +1,4 @@
-% This MATLAB script demonstrates the application of the Semi-Implicit
+% This script demonstrates the application of the Semi-Implicit
 % Mean Curvature Flow (MCF) smoothing technique on a 3D mesh. The goal is to iteratively
 % adjust the vertices of the mesh to smooth the surface by reducing noise
 % and surface irregularities. The script also visualizes the process
@@ -56,22 +56,12 @@ gif_filename_semi_implicit = 'mcf_semi_implicit_method.gif';
 
 % Iterate through the smoothing process for the specified number of iterations.
 for iter = 1:num_iterations
-    % Compute the Laplace-Beltrami operator, which captures the curvature
-    % information of the mesh and is used to determine how the vertices
-    % should be moved to smooth the mesh.
     L = cotmatrix(V_semi, F);
-    
-    % Compute the mass matrix, which is used to normalize the curvature
-    % information. This ensures that the smoothing is done proportionally
-    % to the local area around each vertex.
     M = massmatrix(V_semi, F, 'barycentric');
-    
-    % Compute the coefficient matrix for the semi-implicit method. This matrix
-    % is used to solve for the new vertex positions in each iteration.
     c = time_step * (inv(M) * L);
     
     % Initialize the identity matrix. This matrix will be used in constructing
-    % the system of equations that needs to be solved for each vertex.
+    % the system of equations that need to be solved for each vertex.
     d = speye(size(V_semi, 1));
     A = speye(size(c)) - c; % Construct the system matrix
     
@@ -91,7 +81,7 @@ for iter = 1:num_iterations
         [X, ~] = bicg(A, B, 1e-6, 1000);
         U(:, i) = X; % Store the solution (updated coordinates)
     end
-    V_semi = U; % Update the vertex positions for the next iteration
+    V_semi = U; 
 
     % Compute the volume of the updated mesh and store it in the array.
     volumes_semi(iter + 1) = mesh_volume(V_semi, F);
@@ -120,4 +110,17 @@ for iter = 1:num_iterations
     end
 end
 
-% ---------- Plot the Change
+% ---------- Plot the Change in Volume During Smoothing ----------
+
+% Create a new figure to plot the change in mesh volume over the iterations.
+figure;
+hold on; 
+
+% Plot the volume of the mesh at each iteration for the semi-implicit method.
+plot(0:num_iterations, volumes_semi, '-x', 'DisplayName', 'Semi-Implicit Method');
+xlabel('Iteration'); 
+ylabel('Volume'); 
+title('Change in Volume During Mesh Smoothing'); % Title of the plot
+legend; 
+grid on; 
+hold off; 
