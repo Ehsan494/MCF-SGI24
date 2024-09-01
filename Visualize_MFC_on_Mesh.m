@@ -49,8 +49,11 @@ V_explicit = V_noisy; % Copy the vertices for the explicit method
 for iter = 1:num_iterations
     % Compute the Laplace-Beltrami operator and mean curvature normal
     L = cotmatrix(V_explicit, F);
-    M = massmatrix(V_explicit, F, 'barycentric'); 
-    HN = inv(M)*(L * V_explicit);
+    M = massmatrix(V_explicit, F, 'barycentric');
+    epsilon = 0.001; % Small positive value for regularization
+    M = M + epsilon * speye(size(M)); % Apply regularization
+    HN = M \ (L * V_explicit);  % More stable than inv(M)*
+
     
     V_explicit = V_explicit + time_step * HN;
     
