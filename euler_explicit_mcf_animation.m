@@ -57,14 +57,8 @@ gif_filename_euler_explicit = 'mcf_euler_explicit_method.gif';
 
 % Iterate through the smoothing process for the specified number of iterations.
 for iter = 1:num_iterations
-    % Compute the Laplace-Beltrami operator, which captures the curvature
-    % information of the mesh and is used to determine how the vertices
-    % should be moved to smooth the mesh.
+
     L = cotmatrix(V_explicit, F);
-    
-    % Compute the mass matrix, which is used to normalize the curvature
-    % information. This ensures that the smoothing is done proportionally
-    % to the local area around each vertex.
     M = massmatrix(V_explicit, F, 'barycentric');
     epsilon = 0.001; % Small positive value for regularization
     M = M + epsilon * speye(size(M)); % Apply regularization
@@ -108,9 +102,9 @@ hold on; % Hold on to allow multiple plots on the same figure
 
 % Plot the volume of the mesh at each iteration for the euler explicit method.
 plot(0:num_iterations, volumes_explicit, '-x', 'DisplayName', 'euler_forward_explicit Method');
-xlabel('Iteration'); % Label the x-axis as "Iteration"
-ylabel('Volume'); % Label the y-axis as "Volume"
+xlabel('Iteration'); 
+ylabel('Volume'); 
 title('Change in Volume During Mesh Smoothing'); % Title of the plot
-legend; % Add a legend to distinguish between different methods
-grid on; % Enable grid lines for better readability
-hold off; % Release the hold on the current figure
+legend; 
+grid on; 
+hold off; 
