@@ -1,5 +1,5 @@
 % Script to evaluate and compare Mean Curvature Flow (MCF) methods:
-% Explicit and Semi-Implicit on a 3D mesh.
+% Explicit and Desbrun et al.'s Semi-Implicit on a 3D mesh.
 % This script calculates the smoothed mesh for different time steps and measures accuracy and computational efficiency.
 % revised: Sept, 5 2024
 
