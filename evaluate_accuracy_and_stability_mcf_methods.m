@@ -13,7 +13,7 @@ noise_level = 0.01;
 V_noisy = add_noise_to_mesh(V, noise_level);
 
 epsilon = 0.001; % Small perturbation for numerical stability
-error_threshold = 1;     % Manually set threshold for stability
+error_threshold = 3;     % Manually set threshold for stability
 % Define parameters
 num_iterations = 50; % Number of iterations for smoothing
 %time_steps = logspace(log10(eps), log10(2), 20); % Time steps from small to larger values
