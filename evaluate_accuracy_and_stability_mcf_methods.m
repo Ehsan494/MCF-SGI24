@@ -102,16 +102,6 @@ delta_t_max_semi_implicit = time_steps(find(errors_semi_implicit(:, end) <= erro
 fprintf('Max Stable Time Step (Explicit Euler): %f\n', delta_t_max_explicit);
 fprintf('Max Stable Time Step (Desbrun et al Semi-Implicit): %f\n', delta_t_max_semi_implicit);
 
-% Plot stability vs. time step for each method
-figure;
-loglog(time_steps, errors_explicit(:, end), '-o', 'DisplayName', 'Explicit Euler');
-hold on;
-loglog(time_steps, errors_semi_implicit(:, end), '-s', 'DisplayName', 'Semi-Implicit');
-xlabel('Time Step');
-ylabel('Frobenius Norm of Error');
-title('Stability of MCF Methods: Explicit Euler vs Desbrun et al Semi-Implicit');
-legend('show');
-grid on;
 
 % Plot the relationship between time step and accuracy for each method
 figure;
@@ -165,7 +155,7 @@ fprintf('Convergence Rate for Explicit Method: %.2f\n', slope_explicit);
 fprintf('Convergence Rate for Semi-Implicit Method: %.2f\n', slope_semi_implicit);
 
 % (Optional) Display the fitted lines
-plot(fit_explicit, log(1:num_iterations)', log(errors_explicit), 'k--');
-plot(fit_semi_implicit, log(1:num_iterations)', log(errors_semi_implicit), 'r--');
+%plot(fit_explicit, log(1:num_iterations)', log(errors_explicit), 'k--');
+%plot(fit_semi_implicit, log(1:num_iterations)', log(errors_semi_implicit), 'r--');
 
 
