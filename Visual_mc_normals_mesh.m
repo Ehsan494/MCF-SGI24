@@ -10,9 +10,7 @@ M = massmatrix(V, F, 'barycentric');
 H = -M \ (L * V);
 mean_curvature = sqrt(sum(H.^2, 2));
 normals = per_vertex_normals(V, F); 
-laplacian_H =  L * mean_curvature;  
-grad_H = grad(V, F) * mean_curvature;
-H_squared = mean_curvature .^ 2;
+
 
 
 % Initialize the figure
