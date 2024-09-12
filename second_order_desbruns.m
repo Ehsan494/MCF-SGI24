@@ -1,15 +1,13 @@
-% The purpose of the code is to demonstrate 3 different approaches for performing Mean Curvature Flow (MCF) on a 3D mesh. 
-% Mean Curvature Flow is a geometric process where the vertices of the mesh are iteratively adjusted to smooth the surface. 
-% This is done by moving each vertex in the direction of the mean curvature normal vector, effectively reducing surface irregularities over time.
+% Second-order Desbrun et al.'s implementation using Neumann's series expansion
 
 % Input:
 % - 'bear.off': A 3D mesh file representing the bear model.
 % - noise_level: A parameter controlling the amount of noise added to the original mesh.
 % - num_iterations: Number of iterations for the MCF process.
-% - time_step: A small timestep used in the explicit and semi-implicit methods.
+% - time_step: A small timestep.
 
 % Output:
-% - GIF files displaying the smoothing process for the explicit and semi-implicit MCF methods.
+% - GIF files displaying the smoothing process.
 
 % Load your mesh
 [V, F] = load_mesh('bear.off');
@@ -51,10 +49,9 @@ axis equal;
 % Set camera view
 view_angle = view;
 
-% ---------- Semi-Implicit Method by Desbrun et al. ----------
-V_semi = V_noisy; % Copy the vertices for the semi-implicit method
+V_semi = V_noisy; % Copy the vertices 
 
-% Create GIF file for the semi-implicit method
+% Create GIF file 
 gif_filename_semi_implicit = 'mcf_secondorder_semi_implicit_method.gif';
 
 for iter = 1:num_iterations
@@ -88,10 +85,8 @@ disp(['Spectral Radius: ', num2str(spectral_radius)]);
     % Compute the volume of the updated mesh
     volumes_semi(num_iterations+1) = mesh_volume(V_semi, F);
 
-    % Expand limits slightly if needed
 
-
-    % Display the smoothed mesh - Semi-Implicit Method
+    % Display the smoothed mesh
     trisurf(F, V_semi(:,1), V_semi(:,2), V_semi(:,3), 'FaceColor', [1, 0, 1], 'EdgeColor', 'none');
     axis equal;
     lighting gouraud;
